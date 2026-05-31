@@ -1,32 +1,30 @@
 package com.periut.factoryblocks.platform;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import com.periut.factoryblocks.platform.services.RegistryHelperService;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
 public class RegistryHelper {
-    @ExpectPlatform
-    public static <T extends Block> Supplier<T> registerBlock(Identifier id, RegistryKey<Block> key, Supplier<T> block) {
-        throw new AssertionError();
+    private static final RegistryHelperService SERVICE = Services.load(RegistryHelperService.class);
+
+    public static <T extends Block> Supplier<T> registerBlock(Identifier id, ResourceKey<Block> key, Supplier<T> block) {
+        return SERVICE.registerBlock(id, key, block);
     }
 
-    @ExpectPlatform
-    public static <T extends Item> Supplier<T> registerItem(Identifier id, RegistryKey<Item> key, Supplier<T> item) {
-        throw new AssertionError();
+    public static <T extends Item> Supplier<T> registerItem(Identifier id, ResourceKey<Item> key, Supplier<T> item) {
+        return SERVICE.registerItem(id, key, item);
     }
 
-    @ExpectPlatform
-    public static void addToItemGroup(RegistryKey<ItemGroup> group, Item item) {
-        throw new AssertionError();
+    public static void addToItemGroup(ResourceKey<CreativeModeTab> group, Item item) {
+        SERVICE.addToItemGroup(group, item);
     }
 
-    @ExpectPlatform
     public static void initialize() {
-        throw new AssertionError();
+        SERVICE.initialize();
     }
 }

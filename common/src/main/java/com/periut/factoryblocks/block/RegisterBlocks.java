@@ -5,16 +5,15 @@ import com.periut.factoryblocks.block.fan.BaseFanBlock;
 import com.periut.factoryblocks.block.fan.MediumFanBlock;
 import com.periut.factoryblocks.block.fan.RedstoneFanBlock;
 import com.periut.factoryblocks.platform.RegistryHelper;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-
 import java.util.ArrayList;
 import java.util.function.Supplier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import static com.periut.factoryblocks.FactoryBlocksMod.MODID;
 
@@ -36,26 +35,26 @@ public class RegisterBlocks
 
     private static void addFactoryBlock(String nameID, Type type, boolean include)
     {
-        Identifier blockID = Identifier.of(MODID, nameID);
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, blockID);
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, blockID);
+        Identifier blockID = Identifier.fromNamespaceAndPath(MODID, nameID);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, blockID);
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, blockID);
 
         Supplier<Block> blockSupplier;
 
         switch (type) {
-            default -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new BaseFactoryBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).registryKey(blockKey)));
-            case baseFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new BaseFanBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).registryKey(blockKey)));
-            case redFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new RedstoneFanBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).registryKey(blockKey)));
-            case mediumFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new MediumFanBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).registryKey(blockKey)));
+            default -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new BaseFactoryBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(blockKey)));
+            case baseFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new BaseFanBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(blockKey)));
+            case redFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new RedstoneFanBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(blockKey)));
+            case mediumFan -> blockSupplier = RegistryHelper.registerBlock(blockID, blockKey, () -> new MediumFanBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(blockKey)));
         }
 
-        Supplier<Item> itemSupplier = RegistryHelper.registerItem(blockID, itemKey, () -> new TooltipBlockItem(blockSupplier.get(), new Item.Settings().registryKey(itemKey), nameID + ".tooltip"));
+        Supplier<Item> itemSupplier = RegistryHelper.registerItem(blockID, itemKey, () -> new TooltipBlockItem(blockSupplier.get(), new Item.Properties().setId(itemKey), nameID + ".tooltip"));
         itemSuppliers.add(itemSupplier);
     }
 
     public static void registerItemGroups() {
         for (Supplier<Item> itemSupplier : itemSuppliers) {
-            RegistryHelper.addToItemGroup(RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.ofVanilla("building_blocks")), itemSupplier.get());
+            RegistryHelper.addToItemGroup(ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.withDefaultNamespace("building_blocks")), itemSupplier.get());
         }
     }
 

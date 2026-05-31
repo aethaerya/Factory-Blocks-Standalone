@@ -1,11 +1,12 @@
 package com.periut.factoryblocks.platform.neoforge;
 
 import com.periut.factoryblocks.FactoryBlocksMod;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import com.periut.factoryblocks.platform.services.RegistryHelperService;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
@@ -14,14 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class RegistryHelperImpl {
+public class RegistryHelperImpl implements RegistryHelperService {
     private static final List<DeferredRegister<?>> REGISTERS = new ArrayList<>();
-    private static final Map<RegistryKey<ItemGroup>, List<Item>> ITEM_GROUP_ENTRIES = new HashMap<>();
+    private static final Map<ResourceKey<CreativeModeTab>, List<Item>> ITEM_GROUP_ENTRIES = new HashMap<>();
 
     private static DeferredRegister.Blocks BLOCKS = null;
     private static DeferredRegister.Items ITEMS = null;
 
-    public static <T extends Block> Supplier<T> registerBlock(Identifier id, RegistryKey<Block> key, Supplier<T> block) {
+    @Override
+    public <T extends Block> Supplier<T> registerBlock(Identifier id, ResourceKey<Block> key, Supplier<T> block) {
         if (BLOCKS == null) {
             BLOCKS = DeferredRegister.createBlocks(FactoryBlocksMod.MODID);
             REGISTERS.add(BLOCKS);
@@ -29,7 +31,8 @@ public class RegistryHelperImpl {
         return BLOCKS.register(id.getPath(), block);
     }
 
-    public static <T extends Item> Supplier<T> registerItem(Identifier id, RegistryKey<Item> key, Supplier<T> item) {
+    @Override
+    public <T extends Item> Supplier<T> registerItem(Identifier id, ResourceKey<Item> key, Supplier<T> item) {
         if (ITEMS == null) {
             ITEMS = DeferredRegister.createItems(FactoryBlocksMod.MODID);
             REGISTERS.add(ITEMS);
@@ -37,12 +40,14 @@ public class RegistryHelperImpl {
         return ITEMS.register(id.getPath(), item);
     }
 
-    public static void addToItemGroup(RegistryKey<ItemGroup> group, Item item) {
+    @Override
+    public void addToItemGroup(ResourceKey<CreativeModeTab> group, Item item) {
         // Items will be added via BuildCreativeModeTabContentsEvent in FactoryBlocksNeoforge
         ITEM_GROUP_ENTRIES.computeIfAbsent(group, k -> new ArrayList<>()).add(item);
     }
 
-    public static void initialize() {
+    @Override
+    public void initialize() {
         // DeferredRegisters are registered in FactoryBlocksNeoforge
     }
 
@@ -50,7 +55,7 @@ public class RegistryHelperImpl {
         return REGISTERS;
     }
 
-    public static Map<RegistryKey<ItemGroup>, List<Item>> getItemGroupEntries() {
+    public static Map<ResourceKey<CreativeModeTab>, List<Item>> getItemGroupEntries() {
         return ITEM_GROUP_ENTRIES;
     }
 }

@@ -1,32 +1,38 @@
 package com.periut.factoryblocks.platform.fabric;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import com.periut.factoryblocks.platform.services.RegistryHelperService;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
-public class RegistryHelperImpl {
-    public static <T extends Block> Supplier<T> registerBlock(Identifier id, RegistryKey<Block> key, Supplier<T> block) {
-        T registeredBlock = Registry.register(Registries.BLOCK, id, block.get());
+public class RegistryHelperImpl implements RegistryHelperService {
+
+    @Override
+    public <T extends Block> Supplier<T> registerBlock(Identifier id, ResourceKey<Block> key, Supplier<T> block) {
+        T registeredBlock = Registry.register(BuiltInRegistries.BLOCK, id, block.get());
         return () -> registeredBlock;
     }
 
-    public static <T extends Item> Supplier<T> registerItem(Identifier id, RegistryKey<Item> key, Supplier<T> item) {
-        T registeredItem = Registry.register(Registries.ITEM, id, item.get());
+    @Override
+    public <T extends Item> Supplier<T> registerItem(Identifier id, ResourceKey<Item> key, Supplier<T> item) {
+        T registeredItem = Registry.register(BuiltInRegistries.ITEM, id, item.get());
         return () -> registeredItem;
     }
 
-    public static void addToItemGroup(RegistryKey<ItemGroup> group, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(group).register(entries -> entries.add(item));
+    @Override
+    public void addToItemGroup(ResourceKey<CreativeModeTab> group, Item item) {
+        CreativeModeTabEvents.modifyOutputEvent(group).register(entries -> entries.accept(item));
     }
 
-    public static void initialize() {
+    @Override
+    public void initialize() {
         // Fabric doesn't require explicit initialization
     }
 }

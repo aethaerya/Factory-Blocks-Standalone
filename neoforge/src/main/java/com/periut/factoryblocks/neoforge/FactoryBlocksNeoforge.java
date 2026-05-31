@@ -2,9 +2,9 @@ package com.periut.factoryblocks.neoforge;
 
 import com.periut.factoryblocks.FactoryBlocksMod;
 import com.periut.factoryblocks.platform.neoforge.RegistryHelperImpl;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
@@ -32,11 +32,11 @@ public class FactoryBlocksNeoforge
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        Map<RegistryKey<ItemGroup>, List<Item>> entries = RegistryHelperImpl.getItemGroupEntries();
-        for (Map.Entry<RegistryKey<ItemGroup>, List<Item>> entry : entries.entrySet()) {
+        Map<ResourceKey<CreativeModeTab>, List<Item>> entries = RegistryHelperImpl.getItemGroupEntries();
+        for (Map.Entry<ResourceKey<CreativeModeTab>, List<Item>> entry : entries.entrySet()) {
             if (event.getTabKey().equals(entry.getKey())) {
                 for (Item item : entry.getValue()) {
-                    event.add(item);
+                    event.accept(item);
                 }
             }
         }

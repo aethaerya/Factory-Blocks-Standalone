@@ -1,7 +1,7 @@
 package com.periut.factoryblocks.optional;
 
 import com.periut.chisel.block.ChiselGroupLookup;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ChiselSupport {
     public static void addFactoryBlockToChisel(Identifier blockID)

@@ -1,42 +1,42 @@
 package com.periut.factoryblocks.block.fan;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class RedstoneFanBlock extends BaseFanBlock
 {
-    public static final BooleanProperty ON = BooleanProperty.of("on");
+    public static final BooleanProperty ON = BooleanProperty.create("on");
 
-    public RedstoneFanBlock(Settings settings)
+    public RedstoneFanBlock(Properties settings)
     {
         super(settings);
-        setDefaultState(this.stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.EAST).with(ON, false));
+        registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST).setValue(ON, false));
     }
 
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
+    public void neighborUpdate(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
     {
-        if (!world.isClient())
+        if (!world.isClientSide())
         {
-            if (world.isReceivingRedstonePower(pos))
+            if (world.hasNeighborSignal(pos))
             {
-                world.setBlockState(pos, state.with(ON, true));
+                world.setBlockAndUpdate(pos, state.setValue(ON, true));
             }
             else
             {
-                world.setBlockState(pos, state.with(ON, false));
+                world.setBlockAndUpdate(pos, state.setValue(ON, false));
             }
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(Properties.HORIZONTAL_FACING);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.HORIZONTAL_FACING);
         builder.add(ON);
     }
 }
