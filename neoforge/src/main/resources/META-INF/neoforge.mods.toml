@@ -7,7 +7,7 @@ issueTrackerURL = "https://github.com/aethaerya/Factory-Blocks-Standalone"
 modId = "factory_blocks"
 version = "${version}"
 displayName = "Factory Blocks Standalone"
-authors = "aethaerya"
+authors = "aethaerya, Slainlight"
 description = '''
 Adds Factory Blocks to Vanilla Stonecutter
 '''
