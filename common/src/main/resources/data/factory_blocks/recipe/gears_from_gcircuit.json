@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "factory_blocks:gcircuit"
+  },
+  "result": {
+    "id": "factory_blocks:gears",
+    "count": 1
+  }
+}

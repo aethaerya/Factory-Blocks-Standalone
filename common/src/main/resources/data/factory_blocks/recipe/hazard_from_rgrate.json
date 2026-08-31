@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "factory_blocks:rgrate"
+  },
+  "result": {
+    "id": "factory_blocks:hazard",
+    "count": 1
+  }
+}

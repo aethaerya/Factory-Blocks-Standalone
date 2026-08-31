@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "factory_blocks:rust_plates"
+  },
+  "result": {
+    "id": "factory_blocks:rust_bplates",
+    "count": 1
+  }
+}

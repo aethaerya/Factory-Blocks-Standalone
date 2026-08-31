@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "factory_blocks:fan_on"
+  },
+  "result": {
+    "id": "factory_blocks:insulation",
+    "count": 1
+  }
+}

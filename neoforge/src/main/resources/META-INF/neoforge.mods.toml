@@ -1,15 +1,15 @@
 modLoader="javafml" #mandatory
 loaderVersion="[2,)" #mandatory
 license="MIT"
-issueTrackerURL = "https://github.com/matthewperiut/Chisel-Reborn/issues"
+issueTrackerURL = "https://github.com/aethaerya/Factory-Blocks-Standalone"
 
 [[mods]]
 modId = "factory_blocks"
 version = "${version}"
-displayName = "Factory Blocks"
-authors = "slaincow"
+displayName = "Factory Blocks Standalone"
+authors = "aethaerya"
 description = '''
-Adds Factory Blocks to Chisel Reborn or Chipped
+Adds Factory Blocks to Vanilla Stonecutter
 '''
 logoFile = "assets/factory_blocks/icon.png"
 
@@ -27,3 +27,4 @@ versionRange="[0,)"
 modId="architectury"
 type="required"
 versionRange="[0,)"
+
