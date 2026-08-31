@@ -12,4 +12,4 @@ include("common")
 include("fabric")
 include("neoforge")
 
-rootProject.name = "factory_blocks"
+rootProject.name = "factory_blocks_standalone"
